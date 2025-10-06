@@ -586,7 +586,7 @@ nav {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 0, 212, 0.1), transparent);
-  transition: left 1.5s ease;
+  transition: left 0.5s ease;
 }
 
 .tech-item:hover::before {
@@ -646,7 +646,7 @@ nav {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 0, 212, 0.15), transparent);
-  transition: left 1.8s ease;
+  transition: left 0.5s ease;
   z-index: 1;
 }
 
@@ -986,7 +986,7 @@ footer {
 
 /* ======= PARTICLES STYLES (УПРОЩЕНО) ======= */
 .particles {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -1198,7 +1198,8 @@ a, button, .btn, .logo {
         <div class="service-card" data-service="quantum-web">
           <div class="service-icon">💼</div>
           <h3 class="service-title">BASIC</h3>
-          <p class="service-desc">До 10 устройств(ПК, Принтер, Сервер), Дополнительные услуги, включенные в стоимость:</p>
+          <p class="service-desc">До 10 устройств</p>
+          <p>Включено в стоимость:</p>
           <ul class="service-features">
             <li>Удаленная поддержка</li>
             <li>3 выезда (по запросу)</li>
@@ -1212,7 +1213,8 @@ a, button, .btn, .logo {
         <div class="service-card" data-service="ai-automation">
           <div class="service-icon">💎</div>
           <h3 class="service-title">BUSINESS</h3>
-          <p class="service-desc">До 25 устройств(ПК, Принтер, Сервер), Дополнительные услуги, включенные в стоимость:</p>
+          <p class="service-desc">До 25 устройств</p>
+          <p>Включено в стоимость:</p>
           <ul class="service-features">
             <li>Удаленная поддержка</li>
             <li>6 выездов (по запросу)</li>
@@ -1226,10 +1228,11 @@ a, button, .btn, .logo {
         <div class="service-card" data-service="quantum-security">
           <div class="service-icon">👑</div>
           <h3 class="service-title">VIP</h3>
-          <p class="service-desc">От 25 устройств(ПК, Принтер, Сервер), Дополнительные услуги, включенные в стоимость:</p>
+          <p class="service-desc">От 25 устройств</p>
+          <p>Включено в стоимость:</p>
           <ul class="service-features">
             <li>Удаленная поддержка</li>
-            <li>Индивидуально</li>
+            <li>Выезды: Индивидуально</li>
             <li>Мониторинг стабильности системы</li>
             <li>Поставка оборудования(по запросу)</li>
           </ul>
@@ -1607,8 +1610,8 @@ function orderService(serviceName) {
 // === АНИМАЦИИ ПРИ СКРОЛЛЕ ===
 function setupScrollAnimations() {
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.05,
+        rootMargin: '50px 0px -20px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -1624,7 +1627,7 @@ function setupScrollAnimations() {
     animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(50px)';
-        el.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
+        el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.05}s`;
         observer.observe(el);
     });
 }
@@ -1711,7 +1714,7 @@ async function handleFormSubmit(e) {
         console.log('Статус ответа:', response.status);
 
         // Показать успех
-        showNotification('🎉 Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время. Проверьте также уведомления в Telegram.', 'success');
+        showNotification('🎉 Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
         
         // Сбросить форму
         e.target.reset();
