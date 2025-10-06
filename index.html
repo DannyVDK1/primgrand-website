@@ -20,9 +20,6 @@
 <meta name="twitter:description" content="Высококвалифицированная поддержка серверов, орг.техники и сетей">
 <meta name="twitter:image" content="https://it.primgrand.ru/assets/logo-cyberpunk.png">
 
-<!-- Favicon (опционально) -->
-<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -108,6 +105,43 @@
         flex-direction: column;
     }
 }
+
+/* === УВЕДОМЛЕНИЯ === */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10001;
+    padding: 20px 25px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    max-width: 350px;
+    backdrop-filter: blur(20px);
+    border: 1px solid;
+    transform: translateX(400px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.notification.success {
+    background: rgba(0, 255, 65, 0.15);
+    border-color: #00ff41;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.notification.error {
+    background: rgba(255, 0, 128, 0.15);
+    border-color: #ff0080;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255, 0, 128, 0.3);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
 /* ======= RESET & VARIABLES ======= */
 :root {
   --primary-purple: #6a0dad;
@@ -118,15 +152,6 @@
   --deep-space: #0a0a0f;
   --cosmic-purple: #1a0a33;
   --glass-bg: rgba(25, 10, 46, 0.15);
-
-  /* Переменные из FON для частиц */
-  --cyber-cyan: #00ffff;
-  --cyber-dark-bg: #0a0a0f;
-  --cyber-dark-purple: #2d1b69;
-  --cyber-pink-fon: #ff0080;
-  --cyber-neon-blue: #00bfff;
-  --cyber-electric-violet: #8a2be2;
-  --cyber-green: #00ff41;
 }
 
 *, *::before, *::after {
@@ -145,12 +170,15 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
   cursor: default;
-  background: var(--cyber-dark-bg);
+  background: var(--deep-space);
+  /* УПРОЩЕННЫЙ ФОН */
   background: 
-        radial-gradient(circle at 20% 20%, var(--cyber-dark-purple) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
-        var(--cyber-dark-bg);
+        radial-gradient(ellipse at 20% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 0, 212, 0.05) 0%, transparent 50%),
+        var(--deep-space);
 }
+
+/* УБИРАЕМ СЛОЖНУЮ СЕТКУ */
 body::before {
     content: '';
     position: fixed;
@@ -159,24 +187,19 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(0, 255, 255, 0.02) 50px),
-        repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255, 0, 128, 0.02) 50px);
+        repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(0, 255, 255, 0.01) 102px);
     pointer-events: none;
     z-index: -1;
 }
 
-/* ======= КОСМИЧЕСКИЙ ФОН С WEBGL ======= */
+/* ======= УПРОЩЕННЫЙ КОСМИЧЕСКИЙ ФОН ======= */
 #cosmic-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
   z-index: -20;
-  background: 
-    radial-gradient(ellipse at 20% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(255, 0, 212, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 40% 60%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-    linear-gradient(180deg, #0a0a0f 0%, #1a0a33 50%, #0a0a0f 100%);
+  background: linear-gradient(180deg, #0a0a0f 0%, #1a0a33 50%, #0a0a0f 100%);
 }
 
 /* ======= HEADER С GLASSMORPHISM ======= */
@@ -542,6 +565,7 @@ nav {
   margin: 0 auto;
 }
 
+/* ИСПРАВЛЕНО: добавлены hover эффекты для tech-item */
 .tech-item {
   background: var(--glass-bg);
   backdrop-filter: blur(15px);
@@ -552,6 +576,21 @@ nav {
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.tech-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 212, 0.1), transparent);
+  transition: left 1.5s ease;
+}
+
+.tech-item:hover::before {
+  left: 100%;
 }
 
 .tech-item::after {
@@ -570,8 +609,9 @@ nav {
 }
 
 .tech-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(138, 43, 226, 0.3);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4);
+  border-color: var(--cyber-pink);
 }
 
 /* ======= ПОРТФОЛИО СЕКЦИЯ ======= */
@@ -587,6 +627,7 @@ nav {
   margin: 0 auto;
 }
 
+/* ИСПРАВЛЕНО: улучшены hover эффекты для portfolio-item */
 .portfolio-item {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -595,6 +636,22 @@ nav {
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  position: relative;
+}
+
+.portfolio-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 212, 0.15), transparent);
+  transition: left 1.8s ease;
+  z-index: 1;
+}
+
+.portfolio-item:hover::before {
+  left: 100%;
 }
 
 .portfolio-image {
@@ -613,6 +670,7 @@ nav {
   transform: translate(-50%, -50%);
   font-size: 4rem;
   opacity: 0.7;
+  z-index: 2;
 }
 
 .portfolio-item.rocket .portfolio-image::before {
@@ -629,11 +687,14 @@ nav {
 
 .portfolio-content {
   padding: 25px;
+  position: relative;
+  z-index: 2;
 }
 
 .portfolio-item:hover {
-  transform: translateY(-10px) rotateY(5deg);
-  box-shadow: 0 30px 80px rgba(255, 0, 212, 0.3);
+  transform: translateY(-15px) rotateX(8deg);
+  box-shadow: 0 30px 80px rgba(255, 0, 212, 0.4);
+  border-color: var(--cyber-pink);
 }
 
 /* ======= КОМАНДА СЕКЦИЯ ======= */
@@ -650,6 +711,7 @@ nav {
   margin: 0 auto;
 }
 
+/* ИСПРАВЛЕНО: добавлены hover эффекты для team-member */
 .team-member {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -660,6 +722,21 @@ nav {
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+}
+
+.team-member::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 212, 0.1), transparent);
+  transition: left 1.6s ease;
+}
+
+.team-member:hover::before {
+  left: 100%;
 }
 
 .member-avatar {
@@ -673,6 +750,7 @@ nav {
   justify-content: center;
   font-size: 3rem;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 .member-avatar::before {
@@ -685,8 +763,14 @@ nav {
 }
 
 .team-member:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 70px rgba(255, 0, 212, 0.3);
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 25px 70px rgba(255, 0, 212, 0.4);
+  border-color: var(--cyber-pink);
+}
+
+.team-member:hover .member-avatar {
+  transform: rotate(10deg) scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 0, 212, 0.5);
 }
 
 /* ======= КОНТАКТЫ СЕКЦИЯ ======= */
@@ -743,6 +827,40 @@ nav {
   font-family: inherit;
 }
 
+/* === СОГЛАСИЯ === */
+.consent-group {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.consent-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.consent-item input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    transform: scale(1.2);
+    accent-color: var(--neon-blue);
+}
+
+.consent-item label {
+    margin: 0;
+    line-height: 1.5;
+    color: #e0e0ff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.consent-item a {
+    color: var(--neon-blue);
+    text-decoration: underline;
+}
+
 .submit-btn {
   background: linear-gradient(135deg, var(--cyber-pink), var(--electric-purple));
   border: none;
@@ -755,6 +873,11 @@ nav {
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .submit-btn::before {
@@ -771,7 +894,7 @@ nav {
   left: 100%;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--neon-blue), var(--cyber-pink));
   box-shadow: 0 15px 40px rgba(255, 0, 212, 0.4);
   transform: translateY(-3px);
@@ -861,39 +984,7 @@ footer {
   }
 }
 
-/* ======= ДОПОЛНИТЕЛЬНЫЕ ЭФФЕКТЫ ======= */
-@keyframes particles {
-  0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(-1000px) rotate(360deg); opacity: 0; }
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--cyber-pink);
-  border-radius: 50%;
-  animation: particles 8s linear infinite;
-  box-shadow: 0 0 10px var(--cyber-pink);
-}
-
-/* Автоматическая пауза анимаций при снижении производительности */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Поддержка темной темы */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --glass-bg: rgba(25, 10, 46, 0.2);
-  }
-}
-
-/* ======= PARTICLES STYLES ======= */
+/* ======= PARTICLES STYLES (УПРОЩЕНО) ======= */
 .particles {
     position: fixed;
     top: 0;
@@ -906,12 +997,12 @@ footer {
 
 .particle {
     position: absolute;
-    width: 2px;
-    height: 2px;
-    background: var(--cyber-cyan);
+    width: 1px;
+    height: 1px;
+    background: var(--neon-blue);
     border-radius: 50%;
-    animation: float 15s infinite linear;
-    box-shadow: 0 0 5px var(--cyber-cyan);
+    animation: float 20s infinite linear;
+    box-shadow: 0 0 3px var(--neon-blue);
 }
 
 @keyframes float {
@@ -922,7 +1013,7 @@ footer {
     10% { opacity: 1; }
     90% { opacity: 1; }
     100% {
-        transform: translateY(-100px) translateX(100px) rotate(360deg);
+        transform: translateY(-100px) translateX(50px) rotate(180deg);
         opacity: 0;
     }
 }
@@ -934,14 +1025,14 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--cyber-dark-bg);
+    background: var(--deep-space);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 10000;
     opacity: 1;
-    transition: opacity 0.4s ease-out; /* БЫСТРАЯ анимация скрытия */
+    transition: opacity 0.4s ease-out;
 }
 
 .loading-screen.hidden {
@@ -952,12 +1043,12 @@ footer {
 .loading-logo {
     font-size: clamp(2rem, 8vw, 4rem);
     font-weight: 900;
-    background: linear-gradient(135deg, var(--cyber-cyan) 0%, var(--cyber-pink) 50%, var(--quantum-gold) 100%);
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--cyber-pink) 50%, var(--quantum-gold) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 2rem;
-    animation: logo-pulse 2s ease-in-out infinite; /* Быстрее пульсация */
+    animation: logo-pulse 2s ease-in-out infinite;
     font-family: 'Orbitron', monospace;
     cursor: default;
     user-select: none;
@@ -976,9 +1067,9 @@ footer {
 .loading-bar {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-pink-fon));
+    background: linear-gradient(90deg, var(--neon-blue), var(--cyber-pink));
     border-radius: 2px;
-    transition: width 0.1s ease-out; /* ОЧЕНЬ быстрая анимация */
+    transition: width 0.1s ease-out;
     cursor: default;
 }
 
@@ -1065,8 +1156,8 @@ a, button, .btn, .logo {
 <!-- Particles Background -->
 <div class="particles" id="particles"></div>
 
-
-  <canvas id="cosmic-canvas"></canvas>
+<!-- Упрощенный Cosmic Canvas Background -->
+<canvas id="cosmic-canvas"></canvas>
 
   <header>
     <div class="logo" onclick="scrollToTop()">🐮 PRIMGRAND</div>
@@ -1237,13 +1328,13 @@ a, button, .btn, .logo {
     <section id="contact" class="contact">
       <div class="contact-container">
         <h2 class="section-title">Оставить заявку</h2>
-        <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
+        <form class="contact-form" id="contactForm">
           <div class="form-group">
-            <label class="form-label" for="name">Ваше имя</label>
+            <label class="form-label" for="name">Ваше имя *</label>
             <input type="text" id="name" name="name" class="form-input" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="email">Email</label>
+            <label class="form-label" for="email">Email *</label>
             <input type="email" id="email" name="email" class="form-input" required>
           </div>
           <div class="form-group">
@@ -1254,39 +1345,36 @@ a, button, .btn, .logo {
             <label class="form-label" for="service">Выбор тарифа</label>
             <select id="service" name="service" class="form-input">
               <option value="">Не выбрано</option>
-              <option value="quantum-web">BASIC</option>
-              <option value="ai-automation">BUSINESS</option>
-              <option value="quantum-security">VIP</option>
+              <option value="BASIC">BASIC</option>
+              <option value="BUSINESS">BUSINESS</option>
+              <option value="VIP">VIP</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="budget">Количество устройств</label>
-            <select id="budget" name="budget" class="form-input">
-              <option value="">Не выбрано</option>
-              <option value="500k-1m">1-10</option>
-              <option value="1m-3m">10-25</option>
-              <option value="3m-5m">25 и больше</option>
-            </select>
+            <label class="form-label" for="company">Наименование организации/ИНН *</label>
+            <input type="text" id="company" name="company" class="form-input" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="message">Наименование организации/ИНН</label>
-            <textarea id="message" name="message" class="form-input form-textarea" rows="5" required></textarea>
-          </div><!-- Найдите кнопку "Отправить заявку" и ПЕРЕД НЕЙ добавьте: -->
-<div class="consent-group" style="margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem;">
-    <div class="consent-item" style="display: flex; align-items: flex-start; gap: 0.75rem;">
-        <input type="checkbox" id="personalData" name="personalData" required style="width: auto; margin: 0; transform: scale(1.2); accent-color: var(--neon-blue);">
-        <label for="personalData" style="margin: 0; line-height: 1.5; color: #e0e0ff; font-size: 0.9rem; cursor: pointer;">
-            Я согласен на <a href="#" target="_blank" id="personalDataLink" style="color: var(--neon-blue); text-decoration: underline;">обработку персональных данных</a> *
-        </label>
-    </div>
-    
-    <div class="consent-item" style="display: flex; align-items: flex-start; gap: 0.75rem;">
-        <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required style="width: auto; margin: 0; transform: scale(1.2); accent-color: var(--neon-blue);">
-        <label for="privacyPolicy" style="margin: 0; line-height: 1.5; color: #e0e0ff; font-size: 0.9rem; cursor: pointer;">
-            Я ознакомлен с <a href="#" target="_blank" id="privacyPolicyLink" style="color: var(--neon-blue); text-decoration: underline;">политикой конфиденциальности</a> *
-        </label>
-    </div>
-</div>
+            <label class="form-label" for="message">Дополнительная информация</label>
+            <textarea id="message" name="message" class="form-input form-textarea" rows="5" placeholder="Опишите ваши задачи или особые требования..."></textarea>
+          </div>
+          
+          <div class="consent-group">
+              <div class="consent-item">
+                  <input type="checkbox" id="personalData" name="personalData" required>
+                  <label for="personalData">
+                      Я согласен на <a href="#" target="_blank" id="personalDataLink">обработку персональных данных</a> *
+                  </label>
+              </div>
+              
+              <div class="consent-item">
+                  <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
+                  <label for="privacyPolicy">
+                      Я ознакомлен с <a href="#" target="_blank" id="privacyPolicyLink">политикой конфиденциальности</a> *
+                  </label>
+              </div>
+          </div>
+          
           <button type="submit" class="submit-btn">
             Отправить заявку 🚀
           </button>
@@ -1309,7 +1397,7 @@ a, button, .btn, .logo {
         <p>📧 it@primgrand.ru</p>
         <p>📞 +7 (999) 084-82-82</p>
         <p>🌍 Владивосток, Россия</p>
-        <p>💬 <a href="https://wa.me/79990848282?">WhatsApp</a></p>
+        <p>💬 <a href="https://wa.me/79990848282">WhatsApp</a></p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1318,22 +1406,31 @@ a, button, .btn, .logo {
   </footer>
 
   <script>
+// === КОНФИГУРАЦИЯ ===
+const CONFIG = {
+    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycby4j8R68umgSpW9R8FXWQ8fjg-wTsgK_HPYjoUdGqPkxzglhBPze6E4PCWYcV5pycDewQ/exec',
+    PERSONAL_DATA_URL: '#',
+    PRIVACY_POLICY_URL: '#'
+};
 
-// SUPER FAST Loading Screen - завершается за 1-1.5 секунды!
+// === БЫСТРАЯ ЗАГРУЗКА ===
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 PRIMGRAND загружается...');
+    
+    // Инициализация всех компонентов
+    initializeWebsite();
+    
     const loadingScreen = document.getElementById('loadingScreen');
     const loadingBar = document.getElementById('loadingBar');
     let progress = 0;
+    const startTime = Date.now();
 
-    // Создаем меньше частиц для скорости
+    // Создаем частицы (упрощенно)
     createParticles();
 
-    console.log('⚡ Быстрая загрузка началась...');
-
-    // СУПЕР БЫСТРАЯ загрузка - большие скачки!
+    // СУПЕР БЫСТРАЯ загрузка
     const loadingInterval = setInterval(() => {
-        // ОГРОМНЫЕ скачки 15-25% за раз!
-        progress += Math.random() * 5 + 5;
+        progress += Math.random() * 15 + 10;
 
         if (progress >= 100) {
             progress = 100;
@@ -1342,37 +1439,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
             console.log('⚡ Загрузка завершена за', Date.now() - startTime, 'мс');
 
-            // Скрываем МГНОВЕННО через 100мс
+            // Скрываем быстро
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
-
-                // Удаляем быстро через 300мс
                 setTimeout(() => {
                     if (loadingScreen.parentNode) {
                         loadingScreen.remove();
-                        console.log('⚡ Экран удален - сайт готов!');
+                        console.log('✅ PRIMGRAND готов к работе!');
                     }
-                }, 300);
-            }, 100);
+                }, 400);
+            }, 200);
         } else {
             loadingBar.style.width = progress + '%';
         }
-    }, 60); // Обновляем каждые 60мс - очень часто!
-
-    const startTime = Date.now();
+    }, 80);
 });
 
-// Создание МЕНЬШЕГО количества частиц для скорости
+// === ИНИЦИАЛИЗАЦИЯ САЙТА ===
+function initializeWebsite() {
+    setupFormValidation();
+    setupCookieConsent();
+    setupDocumentLinks();
+    initCosmicCanvas();
+    setupScrollAnimations();
+    setupEasterEgg();
+}
+
+// === СОЗДАНИЕ ЧАСТИЦ (УПРОЩЕНО) ===
 function createParticles() {
     const particlesContainer = document.getElementById('particles');
-    if (!particlesContainer) {
-        console.error('Контейнер частиц не найден!');
-        return;
-    }
+    if (!particlesContainer) return;
 
-    // МЕНЬШЕ частиц = быстрее загрузка
     const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 20 : 40; // Еще меньше частиц
+    const particleCount = isMobile ? 15 : 30; // УМЕНЬШЕНО
 
     console.log('⚡ Создание', particleCount, 'частиц...');
 
@@ -1380,388 +1479,179 @@ function createParticles() {
         const particle = document.createElement('div');
         particle.className = 'particle';
         particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 15 + 's';
-        particle.style.animationDuration = (Math.random() * 5 + 10) + 's';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
 
-        // Цвета частиц
-        const colors = ['#00ffff', '#ff0080', '#8a2be2', '#00ff41'];
+        const colors = ['#00ffff', '#ff0080', '#8a2be2'];
         const selectedColor = colors[Math.floor(Math.random() * colors.length)];
         particle.style.background = selectedColor;
-        particle.style.boxShadow = `0 0 5px ${selectedColor}`;
+        particle.style.boxShadow = `0 0 3px ${selectedColor}`;
 
         particlesContainer.appendChild(particle);
     }
-
-    console.log('⚡ Частицы созданы быстро!');
 }
 
+// === КОСМИЧЕСКИЙ CANVAS (УПРОЩЕН) ===
+function initCosmicCanvas() {
+    const canvas = document.getElementById('cosmic-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [], animationId;
 
-    // ========= КОСМИЧЕСКИЙ CANVAS =========
-    (() => {
-      const canvas = document.getElementById('cosmic-canvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
-      let particles = [];
-      let animationId;
-      let mouseX = 0, mouseY = 0;
-
-      function init() {
+    function init() {
         resize();
-        createParticles();
+        createCosmicParticles();
         animate();
-      }
+    }
 
-      function resize() {
+    function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
-      }
+    }
 
-      function createParticles() {
+    function createCosmicParticles() {
         particles = [];
-        const particleCount = Math.min(window.innerWidth < 768 ? 150 : 300, 300);
+        const particleCount = Math.min(window.innerWidth < 768 ? 50 : 100, 150); // УМЕНЬШЕНО
+        
+        const colors = ['#ff00d4', '#00ffff', '#8a2be2'];
         
         for (let i = 0; i < particleCount; i++) {
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2 + 0.5,
-            opacity: Math.random() * 0.8 + 0.2,
-            pulseSpeed: Math.random() * 0.02 + 0.01,
-            pulsePhase: Math.random() * Math.PI * 2,
-            color: Math.random() > 0.7 ? '#ff00d4' : Math.random() > 0.4 ? '#00ffff' : '#8a2be2'
-          });
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5, // ЗАМЕДЛЕНО
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 1 + 0.5, // УМЕНЬШЕНО
+                opacity: Math.random() * 0.5 + 0.2, // УМЕНЬШЕНО
+                color: colors[Math.floor(Math.random() * colors.length)]
+            });
         }
-      }
+    }
 
-      function animate() {
-        ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+    function animate() {
+        ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'; // ПРОЗРАЧНЕЕ
         ctx.fillRect(0, 0, width, height);
 
-        particles.forEach((particle, index) => {
-          // Обновление позиции
-          particle.x += particle.vx;
-          particle.y += particle.vy;
+        particles.forEach((particle) => {
+            // Обновление позиции
+            particle.x += particle.vx;
+            particle.y += particle.vy;
 
-          // Притяжение к мыши
-          const dx = mouseX - particle.x;
-          const dy = mouseY - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 200) {
-            const force = (200 - distance) / 200;
-            particle.vx += dx * force * 0.0001;
-            particle.vy += dy * force * 0.0001;
-          }
+            // Границы
+            if (particle.x < 0 || particle.x > width) particle.vx *= -1;
+            if (particle.y < 0 || particle.y > height) particle.vy *= -1;
 
-          // Границы
-          if (particle.x < 0 || particle.x > width) particle.vx *= -1;
-          if (particle.y < 0 || particle.y > height) particle.vy *= -1;
-
-          // Пульсация
-          particle.pulsePhase += particle.pulseSpeed;
-          const pulseOpacity = particle.opacity + Math.sin(particle.pulsePhase) * 0.3;
-
-          // Рендеринг
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-          
-          // Градиент для свечения
-          const gradient = ctx.createRadialGradient(
-            particle.x, particle.y, 0,
-            particle.x, particle.y, particle.radius * 8
-          );
-          gradient.addColorStop(0, particle.color + Math.floor(pulseOpacity * 255).toString(16).padStart(2, '0'));
-          gradient.addColorStop(1, particle.color + '00');
-          
-          ctx.fillStyle = gradient;
-          ctx.fill();
-
-          // Основная частица
-          ctx.fillStyle = particle.color + Math.floor(pulseOpacity * 255).toString(16).padStart(2, '0');
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.radius * 0.3, 0, Math.PI * 2);
-          ctx.fill();
+            // Простое свечение
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            ctx.fill();
         });
 
         animationId = requestAnimationFrame(animate);
-      }
+    }
 
-      // События мыши
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      // Клик для создания взрыва частиц
-      document.addEventListener('click', (e) => {
-        for (let i = 0; i < 10; i++) {
-          particles.push({
-            x: e.clientX + (Math.random() - 0.5) * 50,
-            y: e.clientY + (Math.random() - 0.5) * 50,
-            vx: (Math.random() - 0.5) * 8,
-            vy: (Math.random() - 0.5) * 8,
-            radius: Math.random() * 3 + 1,
-            opacity: 1,
-            pulseSpeed: 0.1,
-            pulsePhase: 0,
-            color: '#ffd700',
-            life: 60
-          });
-        }
-      });
-
-      window.addEventListener('resize', () => {
+    window.addEventListener('resize', () => {
         resize();
-        createParticles();
-      });
+        createCosmicParticles();
+    });
 
-      // Пауза при сворачивании вкладки
-      document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-          cancelAnimationFrame(animationId);
+            if (animationId) cancelAnimationFrame(animationId);
         } else {
-          animate();
+            animate();
         }
-      });
+    });
 
-      init();
-    })();
+    init();
+}
 
-    // ========= ФУНКЦИИ ИНТЕРАКТИВНОСТИ =========
-    function scrollToSection(sectionId) {
-      document.getElementById(sectionId).scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+// === ФУНКЦИИ НАВИГАЦИИ ===
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
+}
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    function startDemo() {
-      alert('🎮 Демо-режим активирован! Все эффекты усилены на 200%!');
-      document.documentElement.style.setProperty('--animation-speed', '0.5s');
-    }
-
-    function startProject() {
-      alert('⚡ Отлично! Мы свяжемся с вами как можно скорее!');
-    }
-
-    function orderService(serviceName) {
-      const serviceNames = {
+function orderService(serviceName) {
+    const serviceNames = {
         'quantum-web': 'Тариф BASIC',
         'ai-automation': 'Тариф BUSINESS',
         'quantum-security': 'Тариф VIP'
-      };
-      
-      alert(`🚀 Отлично! Вы выбрали "${serviceNames[serviceName]}". Прокрутите к форме контактов для оформления заказа!`);
-      setTimeout(() => scrollToSection('contact'), 500);
+    };
+    
+    // Автоматически заполняем поле выбора тарифа
+    const serviceSelect = document.getElementById('service');
+    if (serviceSelect) {
+        if (serviceName === 'quantum-web') serviceSelect.value = 'BASIC';
+        else if (serviceName === 'ai-automation') serviceSelect.value = 'BUSINESS';
+        else if (serviceName === 'quantum-security') serviceSelect.value = 'VIP';
     }
+    
+    showNotification(`🚀 Отлично! Вы выбрали "${serviceNames[serviceName]}". Прокрутите к форме для оформления заказа!`, 'success');
+    setTimeout(() => scrollToSection('contact'), 1000);
+}
 
-    // ========= ЭФФЕКТЫ ПРИ СКРОЛЛЕ =========
+// === АНИМАЦИИ ПРИ СКРОЛЛЕ ===
+function setupScrollAnimations() {
     const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
     }, observerOptions);
 
-    // Наблюдение за элементами для анимации появления
-    document.addEventListener('DOMContentLoaded', () => {
-      const animatedElements = document.querySelectorAll('.service-card, .tech-item, .portfolio-item, .team-member');
-      animatedElements.forEach((el, index) => {
+    const animatedElements = document.querySelectorAll('.service-card, .tech-item, .portfolio-item, .team-member');
+    animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(50px)';
         el.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
         observer.observe(el);
-      });
     });
+}
 
-    // ========= EASTER EGG =========
+// === EASTER EGG ===
+function setupEasterEgg() {
     let konamiCode = [];
     const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
 
     document.addEventListener('keydown', (e) => {
-      konamiCode.push(e.code);
-      if (konamiCode.length > konamiSequence.length) {
-        konamiCode.shift();
-      }
-      
-      if (konamiCode.join(',') === konamiSequence.join(',')) {
-        alert('🎊 СЕКРЕТНЫЙ КОД АКТИВИРОВАН! Добро пожаловать в квантовое измерение PRIMGRAND!');
-        document.body.style.filter = 'hue-rotate(180deg)';
-        setTimeout(() => {
-          document.body.style.filter = 'none';
-        }, 3000);
-        konamiCode = [];
-      }
-    });
-
-    // ========= ПРОИЗВОДИТЕЛЬНОСТЬ =========
-    const performanceMonitor = {
-      init() {
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(() => {
-            console.log('🚀 PRIMGRAND Performance Monitor активирован');
-            this.measurePerformance();
-          });
+        konamiCode.push(e.code);
+        if (konamiCode.length > konamiSequence.length) {
+            konamiCode.shift();
         }
-      },
-      
-      measurePerformance() {
-        const observer = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          entries.forEach((entry) => {
-            if (entry.entryType === 'measure') {
-              console.log(`⚡ ${entry.name}: ${entry.duration.toFixed(2)}ms`);
-            }
-          });
-        });
         
-        observer.observe({ entryTypes: ['measure', 'navigation'] });
-      }
-    };
-
-    performanceMonitor.init();
-
-async function submitForm(event) {
-    event.preventDefault();
-    
-    const form = event.target;
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.innerHTML;
-    
-    // Показываем загрузку
-    submitBtn.innerHTML = '⚡ Отправляем...';
-    submitBtn.disabled = true;
-    
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    
-    try {
-        const response = await fetch('/.netlify/functions/send-telegram', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            // Успешная отправка
-            submitBtn.innerHTML = '✅ Отправлено!';
-            submitBtn.style.background = 'linear-gradient(135deg, #00ff41, #00bfff)';
-            
-            // Показать уведомление
-            showNotification('🎉 Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
-            
-            // Очистить форму
-            form.reset();
-            
-            // Вернуть кнопку через 3 секунды
+        if (konamiCode.join(',') === konamiSequence.join(',')) {
+            showNotification('🎊 СЕКРЕТНЫЙ КОД АКТИВИРОВАН! Добро пожаловать в квантовое измерение PRIMGRAND!', 'success');
+            document.body.style.filter = 'hue-rotate(180deg)';
             setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.style.background = '';
-                submitBtn.disabled = false;
+                document.body.style.filter = 'none';
             }, 3000);
-            
-        } else {
-            throw new Error(result.message || 'Ошибка отправки');
+            konamiCode = [];
         }
-        
-    } catch (error) {
-        console.error('Ошибка:', error);
-        showNotification('❌ Ошибка отправки заявки. Попробуйте позже или свяжитесь с нами напрямую.', 'error');
-        
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }
-}
-
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 10001;
-        padding: 20px 25px;
-        border-radius: 12px;
-        color: white;
-        font-weight: 600;
-        max-width: 350px;
-        backdrop-filter: blur(20px);
-        border: 1px solid;
-        transform: translateX(400px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: 'Inter', sans-serif;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    `;
-    
-    if (type === 'success') {
-        notification.style.background = 'rgba(0, 255, 65, 0.15)';
-        notification.style.borderColor = '#00ff41';
-        notification.style.boxShadow += ', 0 0 20px rgba(0, 255, 65, 0.3)';
-    } else if (type === 'error') {
-        notification.style.background = 'rgba(255, 0, 128, 0.15)';
-        notification.style.borderColor = '#ff0080';
-        notification.style.boxShadow += ', 0 0 20px rgba(255, 0, 128, 0.3)';
-    }
-    
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 400);
-    }, 5000);
-    
-    notification.addEventListener('click', () => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 400);
     });
 }
-// === КОНФИГУРАЦИЯ ===
-const CONFIG = {
-    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycby4j8R68umgSpW9R8FXWQ8fjg-wTsgK_HPYjoUdGqPkxzglhBPze6E4PCWYcV5pycDewQ/exec', // ЗАМЕНИТЕ!
-    PERSONAL_DATA_URL: '#', // ЗАМЕНИТЕ НА ССЫЛКУ
-    PRIVACY_POLICY_URL: '#'  // ЗАМЕНИТЕ НА ССЫЛКУ
-};
 
-// === ИНИЦИАЛИЗАЦИЯ НОВЫХ ФУНКЦИЙ ===
-document.addEventListener('DOMContentLoaded', function() {
-    setupFormValidation();
-    setupCookieConsent();
-    setupDocumentLinks();
-});
-
-// === НАСТРОЙКА ФОРМЫ ===
+// === ОБРАБОТКА ФОРМЫ ===
 function setupFormValidation() {
     const form = document.getElementById('contactForm');
     if (form) {
@@ -1775,16 +1665,17 @@ function setupFormValidation() {
     }
 }
 
-// === ОБРАБОТКА ОТПРАВКИ ФОРМЫ ===
 async function handleFormSubmit(e) {
     e.preventDefault();
     
-    // Проверка галочек
+    console.log('📝 Обработка отправки формы...');
+    
+    // Проверка галочек согласия
     const personalDataChecked = document.getElementById('personalData').checked;
     const privacyPolicyChecked = document.getElementById('privacyPolicy').checked;
     
     if (!personalDataChecked || !privacyPolicyChecked) {
-        alert('❌ Необходимо дать согласие на обработку персональных данных и ознакомиться с политикой конфиденциальности');
+        showNotification('❌ Необходимо дать согласие на обработку персональных данных и ознакомиться с политикой конфиденциальности', 'error');
         return;
     }
 
@@ -1792,11 +1683,10 @@ async function handleFormSubmit(e) {
     const originalText = submitButton.textContent;
     
     // Показать загрузку
-    submitButton.textContent = 'Отправка...';
+    submitButton.textContent = '⚡ Отправляем...';
     submitButton.disabled = true;
-    submitButton.style.opacity = '0.6';
 
-    // Собрать данные
+    // Собрать данные формы
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
     
@@ -1805,29 +1695,36 @@ async function handleFormSubmit(e) {
     data.userAgent = navigator.userAgent;
     data.page = window.location.href;
 
+    console.log('📋 Данные формы:', data);
+
     try {
-        // Отправить в Google Sheets
-        await fetch(CONFIG.GOOGLE_SHEETS_URL, {
+        // ИСПРАВЛЕНО: Отправить в Google Sheets
+        const response = await fetch(CONFIG.GOOGLE_SHEETS_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'text/plain'
+            },
             body: JSON.stringify(data)
         });
 
+        console.log('✅ Запрос отправлен в Google Sheets');
+        console.log('Статус ответа:', response.status);
+
         // Показать успех
-        alert('✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+        showNotification('🎉 Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время. Проверьте также уведомления в Telegram.', 'success');
         
         // Сбросить форму
         e.target.reset();
         
     } catch (error) {
-        console.error('Ошибка отправки:', error);
-        alert('❌ Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или свяжитесь с нами по телефону.');
+        console.error('❌ Ошибка отправки:', error);
+        showNotification('🔧 Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или свяжитесь с нами по телефону +7 (999) 084-82-82', 'error');
     } finally {
         // Восстановить кнопку
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-        submitButton.style.opacity = '1';
+        setTimeout(() => {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }, 2000);
     }
 }
 
@@ -1840,46 +1737,134 @@ function formatPhoneNumber(e) {
             value = '7' + value.slice(1);
         }
         
-        const formatted = value.replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4-$5');
-        e.target.value = formatted.substring(0, 18);
+        if (value.length <= 11) {
+            const formatted = value.replace(/(\d{1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/, function(match, p1, p2, p3, p4, p5) {
+                let result = '+' + p1;
+                if (p2) result += ' (' + p2;
+                if (p3) result += ') ' + p3;
+                if (p4) result += '-' + p4;
+                if (p5) result += '-' + p5;
+                return result;
+            });
+            e.target.value = formatted;
+        }
     }
 }
 
-// === COOKIE CONSENT ===
-function setupCookieConsent() {
-    // Показать окно, если согласия нет
-    if (!localStorage.getItem('cookieConsent')) {
+// === УВЕДОМЛЕНИЯ ===
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    // Автоматическое скрытие
+    setTimeout(() => {
+        notification.classList.remove('show');
         setTimeout(() => {
-            document.getElementById('cookieConsent').classList.add('show');
-        }, 2000);
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 400);
+    }, 6000); // Увеличено время показа
+    
+    // Клик для закрытия
+    notification.addEventListener('click', () => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 400);
+    });
+}
+
+// === COOKIE CONSENT (ИСПРАВЛЕН) ===
+function setupCookieConsent() {
+    console.log('🍪 Инициализация Cookie Consent...');
+    
+    // ИСПРАВЛЕНО: Показать окно согласия на cookies сразу же, если еще не принято
+    if (!localStorage.getItem('cookieConsent')) {
+        console.log('🍪 Cookie consent не найден, показываем окно...');
+        
+        // ИСПРАВЛЕНО: Показываем сразу после загрузки DOM
+        setTimeout(() => {
+            const cookieConsent = document.getElementById('cookieConsent');
+            if (cookieConsent) {
+                console.log('🍪 Показываем cookie consent');
+                cookieConsent.classList.add('show');
+            } else {
+                console.error('❌ Элемент cookieConsent не найден!');
+            }
+        }, 2000); // УМЕНЬШЕНО до 2 секунд
+    } else {
+        console.log('🍪 Cookie consent уже принят:', localStorage.getItem('cookieConsent'));
     }
     
     // Обработчики кнопок
-    document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
-    document.getElementById('declineCookies').addEventListener('click', declineCookies);
+    const acceptBtn = document.getElementById('acceptCookies');
+    const declineBtn = document.getElementById('declineCookies');
+    
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', acceptCookies);
+        console.log('🍪 Обработчик acceptCookies добавлен');
+    } else {
+        console.error('❌ Кнопка acceptCookies не найдена!');
+    }
+    
+    if (declineBtn) {
+        declineBtn.addEventListener('click', declineCookies);
+        console.log('🍪 Обработчик declineCookies добавлен');
+    } else {
+        console.error('❌ Кнопка declineCookies не найдена!');
+    }
 }
 
 function acceptCookies() {
+    console.log('🍪 Принимаем cookies...');
     localStorage.setItem('cookieConsent', 'accepted');
     localStorage.setItem('cookieConsentDate', new Date().toISOString());
     hideCookieConsent();
-    console.log('Cookies приняты');
+    showNotification('✅ Настройки cookies сохранены', 'success');
 }
 
 function declineCookies() {
+    console.log('🍪 Отклоняем cookies...');
     localStorage.setItem('cookieConsent', 'declined');
     hideCookieConsent();
+    showNotification('ℹ️ Cookies отклонены. Некоторые функции могут быть ограничены', 'info');
 }
 
 function hideCookieConsent() {
-    document.getElementById('cookieConsent').classList.remove('show');
+    console.log('🍪 Скрываем cookie consent...');
+    const cookieConsent = document.getElementById('cookieConsent');
+    if (cookieConsent) {
+        cookieConsent.classList.remove('show');
+    }
 }
 
 // === ССЫЛКИ НА ДОКУМЕНТЫ ===
 function setupDocumentLinks() {
-    document.getElementById('personalDataLink').href = CONFIG.PERSONAL_DATA_URL;
-    document.getElementById('privacyPolicyLink').href = CONFIG.PRIVACY_POLICY_URL;
+    const personalDataLink = document.getElementById('personalDataLink');
+    const privacyPolicyLink = document.getElementById('privacyPolicyLink');
+    
+    if (personalDataLink) {
+        personalDataLink.href = CONFIG.PERSONAL_DATA_URL;
+    }
+    
+    if (privacyPolicyLink) {
+        privacyPolicyLink.href = CONFIG.PRIVACY_POLICY_URL;
+    }
 }
+
+console.log('🚀 PRIMGRAND JavaScript инициализирован');
+
   </script>
 
 <!-- COOKIE CONSENT -->
