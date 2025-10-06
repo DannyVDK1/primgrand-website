@@ -22,7 +22,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 /* === COOKIE CONSENT === */
 .cookie-consent {
@@ -48,7 +49,7 @@
 }
 
 .cookie-consent h4 {
-    font-family: 'Orbitron', monospace;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
     color: var(--neon-blue);
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
@@ -144,7 +145,7 @@ footer,
     border: 1px solid;
     transform: translateX(400px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     cursor: pointer;
 }
@@ -178,7 +179,11 @@ footer,
 }
 
 *, *::before, *::after {
-  margin: 0; padding: 0; box-sizing: border-box;
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
@@ -243,7 +248,7 @@ header {
 }
 
 .logo {
-  font-family: 'Orbitron', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
   font-weight: 900;
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   background: linear-gradient(135deg, var(--cyber-pink), var(--neon-blue), var(--quantum-gold));
@@ -317,7 +322,7 @@ nav {
 }
 
 .hero-title {
-  font-family: 'Orbitron', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
   font-weight: 900;
   font-size: clamp(2.5rem, 8vw, 6rem);
   margin-bottom: 30px;
@@ -437,7 +442,7 @@ nav {
 }
 
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   text-align: center;
@@ -518,7 +523,7 @@ nav {
 }
 
 .service-title {
-  font-family: 'Orbitron', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--cyber-pink);
@@ -942,7 +947,7 @@ footer {
 
 .footer-section h3 {
   color: var(--cyber-pink);
-  font-family: 'Orbitron', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
   font-weight: 700;
   margin-bottom: 20px;
   font-size: 1.3rem;
@@ -1073,7 +1078,7 @@ footer {
     background-clip: text;
     margin-bottom: 2rem;
     animation: logo-pulse 2s ease-in-out infinite;
-    font-family: 'Orbitron', monospace;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
     cursor: default;
     user-select: none;
 }
