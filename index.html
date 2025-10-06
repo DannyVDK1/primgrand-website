@@ -1009,20 +1009,20 @@ footer {
 
 /* ======= PARTICLES STYLES (УПРОЩЕНО) ======= */
 .particles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    z-index: 1;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important; 
+    height: 100vh !important;
+    min-height: 100vh !important;
+    z-index: -1 !important;
     pointer-events: none !important;
 }
 
 .particle {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 2px;
+    height: 2px;
     background: var(--neon-blue);
     border-radius: 50%;
     animation: float 20s infinite linear;
@@ -1187,7 +1187,6 @@ a, button, .btn, .logo {
 <div class="particles" id="particles"></div>
 
 <!-- Упрощенный Cosmic Canvas Background -->
-<canvas id="cosmic-canvas"></canvas>
 
   <header>
     <div class="logo" onclick="scrollToTop()">🐮 PRIMGRAND</div>
@@ -1493,7 +1492,6 @@ function initializeWebsite() {
     setupFormValidation();
     setupCookieConsent();
     setupDocumentLinks();
-    initCosmicCanvas();
     setupScrollAnimations();
     setupEasterEgg();
 }
@@ -1504,7 +1502,7 @@ function createParticles() {
     if (!particlesContainer) return;
 
     const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 15 : 30; // УМЕНЬШЕНО
+    const particleCount = isMobile ? 25 : 40; // УМЕНЬШЕНО
 
     console.log('⚡ Создание', particleCount, 'частиц...');
 
@@ -1523,91 +1521,6 @@ function createParticles() {
         particlesContainer.appendChild(particle);
     }
 }
-
-// === КОСМИЧЕСКИЙ CANVAS (УПРОЩЕН) ===
-function initCosmicCanvas() {
-    const canvas = document.getElementById('cosmic-canvas');
-    if (!canvas) return;
-
-    // ← ВСТАВИТЕ ЭТО СРАЗУ ПОСЛЕ ПОВЕРКИ canvas
-    canvas.style.pointerEvents = 'none';
-    canvas.style.webkitTapHighlightColor = 'transparent';
-    const ctx = canvas.getContext('2d');
-    let width, height, particles = [], animationId;
-
-    function init() {
-        resize();
-        createCosmicParticles();
-        animate();
-    }
-
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-
-    function createCosmicParticles() {
-        particles = [];
-        const particleCount = Math.min(window.innerWidth < 768 ? 25 : 50, 75); // УМЕНЬШЕНО
-        
-        const colors = ['#ff00d4', '#00ffff', '#8a2be2'];
-        
-        for (let i = 0; i < particleCount; i++) {
-            particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.1, // ЗАМЕДЛЕНО
-                vy: (Math.random() - 0.5) * 0.1,
-                radius: Math.random() * 0.8 + 0.5, // УМЕНЬШЕНО
-                opacity: Math.random() * 0.5 + 0.2, // УМЕНЬШЕНО
-                color: colors[Math.floor(Math.random() * colors.length)]
-            });
-        }
-    }
-
-    function animate() {
-        ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'; // ПРОЗРАЧНЕЕ
-        ctx.fillRect(0, 0, width, height);
-
-        particles.forEach((particle) => {
-            // Обновление позиции
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-
-            // Границы
-            if (particle.x < 0 || particle.x > width) particle.vx *= -1;
-            if (particle.y < 0 || particle.y > height) particle.vy *= -1;
-
-            // Простое свечение
-            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
-            ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        animationId = requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-        resize();
-        createCosmicParticles();
-    });
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            if (animationId) cancelAnimationFrame(animationId);
-        } else {
-            animate();
-        }
-    });
-
-    init();
-}
-// Отключить все реакции на длительное нажатие и жесты давления
-particlesContainer.style.pointerEvents = 'none';
-
 
 // === ФУНКЦИИ НАВИГАЦИИ ===
 function scrollToSection(sectionId) {
@@ -1646,8 +1559,8 @@ function orderService(serviceName) {
 // === АНИМАЦИИ ПРИ СКРОЛЛЕ ===
 function setupScrollAnimations() {
     const observerOptions = {
-        threshold: 0.05,
-        rootMargin: '50px 0px -20px 0px'
+        threshold: 0.01,
+        rootMargin: '100px 0px -10px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -1662,8 +1575,8 @@ function setupScrollAnimations() {
     const animatedElements = document.querySelectorAll('.service-card, .tech-item, .portfolio-item, .team-member');
     animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(50px)';
-        el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.05}s`;
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `all 0.2s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.02}s`;
         observer.observe(el);
     });
 }
