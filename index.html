@@ -27,6 +27,87 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
+/* === COOKIE CONSENT === */
+.cookie-consent {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: rgba(26, 10, 51, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cookie-consent.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cookie-consent h4 {
+    font-family: 'Orbitron', monospace;
+    color: var(--neon-blue);
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.cookie-consent p {
+    color: #b0b0d0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.cookie-consent-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.cookie-consent .btn {
+    flex: 1;
+    min-width: auto;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cookie-consent .btn-accept {
+    background: linear-gradient(135deg, #00ff41 0%, #00ffff 100%);
+    color: #0a0a0f;
+    font-weight: 600;
+}
+
+.cookie-consent .btn-decline {
+    background: rgba(255, 0, 212, 0.1);
+    color: #ff00d4;
+    border: 1px solid #ff00d4;
+}
+
+.cookie-consent .btn:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .cookie-consent {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .cookie-consent-buttons {
+        flex-direction: column;
+    }
+}
 /* ======= RESET & VARIABLES ======= */
 :root {
   --primary-purple: #6a0dad;
@@ -1054,7 +1135,7 @@ a, button, .btn, .logo {
         <div class="service-card" data-service="quantum-security">
           <div class="service-icon">👑</div>
           <h3 class="service-title">VIP</h3>
-          <p class="service-desc">От 25 устройств(ПК, Принтер, Сервер), Дополнительные услоги, включенные в стоимость:</p>
+          <p class="service-desc">От 25 устройств(ПК, Принтер, Сервер), Дополнительные услуги, включенные в стоимость:</p>
           <ul class="service-features">
             <li>Удаленная поддержка</li>
             <li>Индивидуально</li>
@@ -1156,7 +1237,7 @@ a, button, .btn, .logo {
     <section id="contact" class="contact">
       <div class="contact-container">
         <h2 class="section-title">Оставить заявку</h2>
-        <form class="contact-form" onsubmit="submitForm(event)">
+        <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
           <div class="form-group">
             <label class="form-label" for="name">Ваше имя</label>
             <input type="text" id="name" name="name" class="form-input" required>
@@ -1164,6 +1245,10 @@ a, button, .btn, .logo {
           <div class="form-group">
             <label class="form-label" for="email">Email</label>
             <input type="email" id="email" name="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+           <label class="form-label" for="phone">Телефон *</label>
+          <input type="tel" id="phone" name="phone" class="form-input" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="service">Выбор тарифа</label>
@@ -1184,9 +1269,24 @@ a, button, .btn, .logo {
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="message">Комментарии</label>
+            <label class="form-label" for="message">Наименование организации/ИНН</label>
             <textarea id="message" name="message" class="form-input form-textarea" rows="5" required></textarea>
-          </div>
+          </div><!-- Найдите кнопку "Отправить заявку" и ПЕРЕД НЕЙ добавьте: -->
+<div class="consent-group" style="margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem;">
+    <div class="consent-item" style="display: flex; align-items: flex-start; gap: 0.75rem;">
+        <input type="checkbox" id="personalData" name="personalData" required style="width: auto; margin: 0; transform: scale(1.2); accent-color: var(--neon-blue);">
+        <label for="personalData" style="margin: 0; line-height: 1.5; color: #e0e0ff; font-size: 0.9rem; cursor: pointer;">
+            Я согласен на <a href="#" target="_blank" id="personalDataLink" style="color: var(--neon-blue); text-decoration: underline;">обработку персональных данных</a> *
+        </label>
+    </div>
+    
+    <div class="consent-item" style="display: flex; align-items: flex-start; gap: 0.75rem;">
+        <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required style="width: auto; margin: 0; transform: scale(1.2); accent-color: var(--neon-blue);">
+        <label for="privacyPolicy" style="margin: 0; line-height: 1.5; color: #e0e0ff; font-size: 0.9rem; cursor: pointer;">
+            Я ознакомлен с <a href="#" target="_blank" id="privacyPolicyLink" style="color: var(--neon-blue); text-decoration: underline;">политикой конфиденциальности</a> *
+        </label>
+    </div>
+</div>
           <button type="submit" class="submit-btn">
             Отправить заявку 🚀
           </button>
@@ -1463,15 +1563,6 @@ function createParticles() {
       setTimeout(() => scrollToSection('contact'), 500);
     }
 
-    function submitForm(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData);
-      
-      alert(`✅ Спасибо, ${data.name}! Ваша заявка отправлена. Мы свяжемся с вами как можно скорее! "${data.service || 'не указано'}".`);
-      event.target.reset();
-    }
-
     // ========= ЭФФЕКТЫ ПРИ СКРОЛЛЕ =========
     const observerOptions = {
       threshold: 0.1,
@@ -1656,6 +1747,150 @@ function showNotification(message, type = 'info') {
         }, 400);
     });
 }
+// === КОНФИГУРАЦИЯ ===
+const CONFIG = {
+    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycby4j8R68umgSpW9R8FXWQ8fjg-wTsgK_HPYjoUdGqPkxzglhBPze6E4PCWYcV5pycDewQ/exec', // ЗАМЕНИТЕ!
+    PERSONAL_DATA_URL: '#', // ЗАМЕНИТЕ НА ССЫЛКУ
+    PRIVACY_POLICY_URL: '#'  // ЗАМЕНИТЕ НА ССЫЛКУ
+};
+
+// === ИНИЦИАЛИЗАЦИЯ НОВЫХ ФУНКЦИЙ ===
+document.addEventListener('DOMContentLoaded', function() {
+    setupFormValidation();
+    setupCookieConsent();
+    setupDocumentLinks();
+});
+
+// === НАСТРОЙКА ФОРМЫ ===
+function setupFormValidation() {
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // Маска телефона
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', formatPhoneNumber);
+    }
+}
+
+// === ОБРАБОТКА ОТПРАВКИ ФОРМЫ ===
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    // Проверка галочек
+    const personalDataChecked = document.getElementById('personalData').checked;
+    const privacyPolicyChecked = document.getElementById('privacyPolicy').checked;
+    
+    if (!personalDataChecked || !privacyPolicyChecked) {
+        alert('❌ Необходимо дать согласие на обработку персональных данных и ознакомиться с политикой конфиденциальности');
+        return;
+    }
+
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    
+    // Показать загрузку
+    submitButton.textContent = 'Отправка...';
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.6';
+
+    // Собрать данные
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Добавить метаданные
+    data.timestamp = new Date().toLocaleString('ru-RU');
+    data.userAgent = navigator.userAgent;
+    data.page = window.location.href;
+
+    try {
+        // Отправить в Google Sheets
+        await fetch(CONFIG.GOOGLE_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        // Показать успех
+        alert('✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+        
+        // Сбросить форму
+        e.target.reset();
+        
+    } catch (error) {
+        console.error('Ошибка отправки:', error);
+        alert('❌ Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или свяжитесь с нами по телефону.');
+    } finally {
+        // Восстановить кнопку
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
+    }
+}
+
+// === ФОРМАТИРОВАНИЕ ТЕЛЕФОНА ===
+function formatPhoneNumber(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 0) {
+        if (value[0] === '8') {
+            value = '7' + value.slice(1);
+        }
+        
+        const formatted = value.replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4-$5');
+        e.target.value = formatted.substring(0, 18);
+    }
+}
+
+// === COOKIE CONSENT ===
+function setupCookieConsent() {
+    // Показать окно, если согласия нет
+    if (!localStorage.getItem('cookieConsent')) {
+        setTimeout(() => {
+            document.getElementById('cookieConsent').classList.add('show');
+        }, 2000);
+    }
+    
+    // Обработчики кнопок
+    document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
+    document.getElementById('declineCookies').addEventListener('click', declineCookies);
+}
+
+function acceptCookies() {
+    localStorage.setItem('cookieConsent', 'accepted');
+    localStorage.setItem('cookieConsentDate', new Date().toISOString());
+    hideCookieConsent();
+    console.log('Cookies приняты');
+}
+
+function declineCookies() {
+    localStorage.setItem('cookieConsent', 'declined');
+    hideCookieConsent();
+}
+
+function hideCookieConsent() {
+    document.getElementById('cookieConsent').classList.remove('show');
+}
+
+// === ССЫЛКИ НА ДОКУМЕНТЫ ===
+function setupDocumentLinks() {
+    document.getElementById('personalDataLink').href = CONFIG.PERSONAL_DATA_URL;
+    document.getElementById('privacyPolicyLink').href = CONFIG.PRIVACY_POLICY_URL;
+}
   </script>
+
+<!-- COOKIE CONSENT -->
+<div class="cookie-consent" id="cookieConsent">
+    <h4>🍪 Мы используем cookies</h4>
+    <p>Этот сайт использует cookies для улучшения пользовательского опыта и аналитики.</p>
+    <div class="cookie-consent-buttons">
+        <button class="btn btn-accept" id="acceptCookies">Принять</button>
+        <button class="btn btn-decline" id="declineCookies">Отклонить</button>
+    </div>
+</div>
+
 </body>
 </html>
