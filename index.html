@@ -106,6 +106,29 @@
     }
 }
 
+/* 1. Запретить горизонтальный скролл по всему документу */
+html, body {
+  overflow-x: hidden;
+}
+
+/* 2. Разрешить только вертикальный панинг (скролл) */
+body {
+  touch-action: pan-y;
+}
+
+/* 3. Отключить «перетягивание» по оси X для фоновых и основных блоков */
+.particles,
+main,
+header,
+footer,
+.services,
+.technologies,
+.portfolio,
+.team,
+.contact {
+  overscroll-behavior-x: none;
+}
+
 /* === УВЕДОМЛЕНИЯ === */
 .notification {
     position: fixed;
@@ -1580,6 +1603,9 @@ function initCosmicCanvas() {
 
     init();
 }
+// Отключить все реакции на длительное нажатие и жесты давления
+particlesContainer.style.pointerEvents = 'none';
+
 
 // === ФУНКЦИИ НАВИГАЦИИ ===
 function scrollToSection(sectionId) {
