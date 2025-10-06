@@ -1532,11 +1532,6 @@ function initCosmicCanvas() {
     // ← ВСТАВИТЕ ЭТО СРАЗУ ПОСЛЕ ПОВЕРКИ canvas
     canvas.style.pointerEvents = 'none';
     canvas.style.webkitTapHighlightColor = 'transparent';
-    canvas.addEventListener('touchmove', e => {
-      e.preventDefault(); 
-    }, { passive: false });
-    // ↑
-
     const ctx = canvas.getContext('2d');
     let width, height, particles = [], animationId;
 
