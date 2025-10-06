@@ -868,10 +868,13 @@ border-color: var(--cyber-pink);
 }
 
 .consent-item input[type="checkbox"] {
-    width: auto;
+    width: 20px;
+    height: 20px;
     margin: 0;
     transform: scale(1.2);
-    accent-color: var(--neon-blue);
+    accent-color: #ff00d4;
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
 .consent-item label {
@@ -1174,6 +1177,16 @@ a, button, .btn, .logo {
         -webkit-tap-highlight-color: transparent !important;
         outline: none !important
 
+/* === АДАПТИВНЫЕ ПЕРЕНОСЫ === */
+/* Адаптивный перенос ТОЛЬКО на мобилках */
+@media (max-width: 768px) {
+    .consent-item label {
+        line-height: 1.5;
+        word-break: break-word; /* Автоматический перенос слов */
+    }
+}
+
+
 </style>
 </head>
 
@@ -1394,22 +1407,23 @@ a, button, .btn, .logo {
             <textarea id="message" name="message" class="form-input form-textarea" rows="5" placeholder="Опишите ваши задачи или особые требования..."></textarea>
           </div>
           
-          <div class="consent-group">
-              <div class="consent-item">
-                  <input type="checkbox" id="personalData" name="personalData" required>
-                  <label for="personalData">
-                      Я согласен на <a href="#" target="_blank" id="personalDataLink">обработку персональных данных</a> *
-                  </label>
-              </div>
-              
-              <div class="consent-item">
-                  <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
-                  <label for="privacyPolicy">
-                      Я ознакомлен с <a href="#" target="_blank" id="privacyPolicyLink">политикой конфиденциальности</a> *
-                  </label>
-              </div>
-          </div>
-          
+<div class="consent-group">
+    <div class="consent-item">
+        <input type="checkbox" id="personalData" name="personalData" required>
+        <label for="personalData">
+            Я согласен на <a href="#" target="_blank" id="personalDataLink">обработку персональных данных</a> *
+        </label>
+    </div>
+    
+    <div class="consent-item">
+        <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
+        <label for="privacyPolicy">
+            Я ознакомлен с <a href="#" target="_blank" id="privacyPolicyLink">политикой конфиденциальности</a> *
+        </label>
+    </div>
+</div>
+
+  
           <button type="submit" class="submit-btn">
             Отправить заявку 🚀
           </button>
