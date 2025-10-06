@@ -1556,7 +1556,7 @@ function initCosmicCanvas() {
 
     function createCosmicParticles() {
         particles = [];
-        const particleCount = Math.min(window.innerWidth < 768 ? 50 : 100, 150); // УМЕНЬШЕНО
+        const particleCount = Math.min(window.innerWidth < 768 ? 25 : 50, 75); // УМЕНЬШЕНО
         
         const colors = ['#ff00d4', '#00ffff', '#8a2be2'];
         
@@ -1564,9 +1564,9 @@ function initCosmicCanvas() {
             particles.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.5, // ЗАМЕДЛЕНО
-                vy: (Math.random() - 0.5) * 0.5,
-                radius: Math.random() * 1 + 0.5, // УМЕНЬШЕНО
+                vx: (Math.random() - 0.5) * 0.1, // ЗАМЕДЛЕНО
+                vy: (Math.random() - 0.5) * 0.1,
+                radius: Math.random() * 0.8 + 0.5, // УМЕНЬШЕНО
                 opacity: Math.random() * 0.5 + 0.2, // УМЕНЬШЕНО
                 color: colors[Math.floor(Math.random() * colors.length)]
             });
