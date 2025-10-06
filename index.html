@@ -1559,8 +1559,8 @@ function orderService(serviceName) {
 // === АНИМАЦИИ ПРИ СКРОЛЛЕ ===
 function setupScrollAnimations() {
     const observerOptions = {
-        threshold: 0.01,
-        rootMargin: '100px 0px -10px 0px'
+        threshold: 0.03,
+        rootMargin: '70px 0px -10px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -1575,8 +1575,8 @@ function setupScrollAnimations() {
     const animatedElements = document.querySelectorAll('.service-card, .tech-item, .portfolio-item, .team-member');
     animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = `all 0.2s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.02}s`;
+        el.style.transform = 'translateY(40px)';
+        el.style.transition = `all 0.3s cubic-bezier(0.4, 0, 0.3, 1) ${index * 0.02}s`;
         observer.observe(el);
     });
 }
